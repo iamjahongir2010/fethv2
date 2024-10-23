@@ -67,3 +67,65 @@ document.getElementById('itemForm').addEventListener('submit', async function (e
     displayError(error); // Функция для отображения ошибки
   }
 });
+function displayData(data) {
+  const outputDiv = document.getElementById('output');
+  outputDiv.innerHTML = '<ol></ol>'; // Создаем пустой упорядоченный список
+
+  const olElement = outputDiv.querySelector('ol'); // Получаем ссылку на список
+
+  data.forEach(item => {
+    olElement.innerHTML += `
+        <div class="card">
+          <li>
+            <h4>${item.name} (ID: ${item.id})</h4>
+            <p><strong>Description:</strong> ${item.description}</p>
+            <p><strong>Quantity:</strong> ${item.quantity}</p>
+          </li>
+          <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+          <button id="change">change</button>
+        </div>
+      `;
+  });
+}
+
+// Функция для удаления элемента по ID 
+async function deleteItem(id) { 
+  try { 
+    const response = await fetch(`http://localhost:3000/items/${id}`, { 
+      method: 'DELETE', 
+      headers: { 
+        'Content-Type': 'application/json', 
+      } 
+    }); 
+ 
+    if (!response.ok) { 
+      throw new Error(`Ошибка: ${response.status}`); 
+    } 
+ 
+    // Здесь можно добавить логику для обновления интерфейса после успешного удаления 
+    console.log(`Элемент с ID ${id} успешно удален.`); 
+  } catch (error) { 
+    console.error('Ошибка при удалении элемента:', error); 
+    displayError(error); 
+  } 
+}
+async function deleteItem(id) { 
+  try { 
+    const response = await fetch(`http://localhost:3000/items/${id}`, { 
+      method: 'PUT', 
+      headers: { 
+        'Content-Type': 'application/json', 
+      } 
+    }); 
+ 
+    if (!response.ok) { 
+      throw new Error(`Ошибка: ${response.status}`); 
+    } 
+ 
+    // Здесь можно добавить логику для обновления интерфейса после успешного удаления 
+    console.log(`Элемент с ID ${id} успешно изменён.`); 
+  } catch (error) { 
+    console.error('Ошибка при изменении элемента:', error); 
+    displayError(error); 
+  } 
+}
